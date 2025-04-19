@@ -100,3 +100,85 @@ export default {
 };
 
 export type { AppType } from './routes';
+
+// // src/index.ts ---------------------------------------------------------------
+// import { Hono } from 'hono';
+// import { cors } from 'hono/cors';
+// import { csrf } from 'hono/csrf';
+// import { logger } from 'hono/logger';
+// import { poweredBy } from 'hono/powered-by';
+// import { prettyJSON } from 'hono/pretty-json';
+// import { secureHeaders } from 'hono/secure-headers';
+// import { serveStatic } from 'hono/bun';
+// import { prometheus } from '@hono/prometheus';
+
+// import connectDB from './db/connect';
+// import { parsedEnv } from '../env';
+// import { errorHandler, notFound } from './middlewares';
+// import { routes } from './routes';
+// import { TagModel } from './db/models';
+
+// /* ------------------------------------------------------------------------ */
+// /* 1.  Parse env + connect to MongoDB                                       */
+// /* ------------------------------------------------------------------------ */
+// parsedEnv(); // populates Bun.env (throws if missing vars)
+// await connectDB(); // mongoose connection (await!)
+
+// /* ------------------------------------------------------------------------ */
+// /* 2.  Load cron‑jobs AFTER DB is up                                        */
+// /*     ─────────────────────────────                                        */
+// /*     Importing this file registers every node‑cron schedule.              */
+// /* ------------------------------------------------------------------------ */
+// // import './cron-jobs'; // side‑effect: schedules jobs immediately
+
+// /* ------------------------------------------------------------------------ */
+// /* 3.  Hono app + global middlewares                                        */
+// /* ------------------------------------------------------------------------ */
+// const app = new Hono();
+
+// const { printMetrics, registerMetrics } = prometheus();
+// const origins = Bun.env.ORIGINS ? Bun.env.ORIGINS.split(',') : [];
+
+// /* Cookie defaults you can reuse in controllers */
+// export const cookieOptions = {
+//   httpOnly: true,
+//   sameSite: 'None',
+//   secure: true,
+// } as const;
+
+// /* ---------- Standard middleware chain ---------- */
+// app.use(poweredBy());
+// app.use(logger());
+// app.use('*', registerMetrics);
+// app.get('/metrics', printMetrics);
+// app.use(secureHeaders());
+// app.use(prettyJSON());
+// app.use(
+//   cors({
+//     origin: origins,
+//     credentials: true,
+//     allowHeaders: ['Content-Type', 'Authorization'],
+//   })
+// );
+// app.use(csrf());
+
+// /* Static assets (if you serve PDFs or images) */
+// app.use('/assets/*', serveStatic({ path: './assets' }));
+
+// /* Optional health‑check endpoint */
+// app.get('/health', (c) => c.json({ status: 'ok' }));
+
+//  app.route('/', routes);
+
+//  app.onError((err, c) => errorHandler(c));
+// app.notFound((c) => notFound(c));
+
+//  export default {
+//   port: +(Bun.env.PORT || 4500),
+//   fetch: app.fetch,
+// };
+
+// // create a tag
+// TagModel.create({ name: 'test', standardMinutes: 10 });
+
+// export type { AppType } from './routes';
