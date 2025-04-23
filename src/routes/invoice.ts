@@ -1,17 +1,26 @@
 import { Hono } from 'hono';
 import { createInvoiceHandler, getInvoiceHandler, updateInvoiceStatusHandler, reconcileInvoiceHandler } from '../controllers/invoice.controller';
 import { adminAuthMiddleware } from '../middlewares';
+import { zJsonValidator, zParamsValidator } from '@/utils/zValidators';
+import { invoiceCreateSchema, invoiceUpdateSchema } from '@/db/models';
+import { zodIdSchema } from '@/db/common-schemas';
 
 export const invoiceRouter = new Hono();
 
 // Create Invoice
-invoiceRouter.post('/', adminAuthMiddleware, createInvoiceHandler);
+invoiceRouter.post('/', adminAuthMiddleware, zJsonValidator(invoiceCreateSchema), createInvoiceHandler);
 
 // Get one Invoice
-invoiceRouter.get('/:id', adminAuthMiddleware, getInvoiceHandler);
+invoiceRouter.get('/:_id', adminAuthMiddleware, getInvoiceHandler);
 
 // Manually patch Invoice status
-invoiceRouter.patch('/:id/status', adminAuthMiddleware, updateInvoiceStatusHandler);
+invoiceRouter.patch(
+  '/:_id/status',
+  adminAuthMiddleware,
+  zParamsValidator(zodIdSchema),
+  zJsonValidator(invoiceUpdateSchema),
+  updateInvoiceStatusHandler
+);
 
 // Reconcile payments & update received/balance
-invoiceRouter.post('/:id/reconcile', adminAuthMiddleware, reconcileInvoiceHandler);
+invoiceRouter.post('/:_id/reconcile', adminAuthMiddleware, reconcileInvoiceHandler);

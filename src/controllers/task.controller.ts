@@ -9,8 +9,8 @@ const intervalSchema = z.object({ start: z.string().refine((s) => !isNaN(Date.pa
 const idParam = z.object({ id: z.string(), projectId: z.string() });
 
 export async function createTaskHandler(c: Context) {
-  const data = taskCreateSchema.parse(await c.req.json());
-  const task = await createTask(data);
+  const { projectId, assigneeId, tagId, loggedMinutes, status, intervals } = taskCreateSchema.parse(await c.req.json());
+  const task = await createTask({ projectId, assigneeId, tagId, loggedMinutes, status, intervals });
   return c.json(task, 201);
 }
 

@@ -32,9 +32,18 @@ export const invoiceZod = z.object({
   cgst: z.number(),
   netTotal: z.number(),
   received: z.number(),
-  balance: z.number(),
+  balance: z.number(), //remove
   status: z.enum(['pending', 'not_received', 'partial', 'fully_paid']).default('pending'),
 });
+
+//create
+export const invoiceCreateSchema = invoiceZod.strict();
+export type InvoiceCreate = z.infer<typeof invoiceCreateSchema>;
+
+//update
+export const invoiceUpdateSchema = invoiceZod.partial().strict();
+export type InvoiceUpdate = z.infer<typeof invoiceUpdateSchema>;
+
 export type IInvoice = z.infer<typeof invoiceZod> & IBaseDocument;
 
 const lineItemSchema = new Schema(

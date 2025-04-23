@@ -10,6 +10,20 @@ export const leadZod = z.object({
   status: z.enum(['pending', 'approved', 'rejected', 'converted']).default('pending'),
   notes: z.array(z.string()).default([]),
 });
+
+// create
+export const leadCreateSchema = leadZod
+  .pick({
+    name: true,
+    notes: true,
+  })
+  .strict();
+export type LeadCreate = z.infer<typeof leadCreateSchema>;
+
+// update
+export const leadUpdateSchema = leadZod.partial().strict();
+export type LeadUpdate = z.infer<typeof leadUpdateSchema>;
+
 export type ILead = z.infer<typeof leadZod> & IBaseDocument;
 
 const LeadSchema = createSchema<ILead>({

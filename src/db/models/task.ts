@@ -15,11 +15,21 @@ export const taskZod = z.object({
   status: z.enum(['not-started', 'on-going', 'on-hold', 'completed']).default('not-started'),
   intervals: z.array(intervalZod).default([]),
 });
+
+//create
+export const taskCreateSchema = taskZod.strict();
+export type TaskCreate = z.infer<typeof taskCreateSchema>;
+
+//update
+export const taskUpdateSchema = taskZod.partial().strict();
+export type TaskUpdate = z.infer<typeof taskUpdateSchema>;
+
 export type ITask = z.infer<typeof taskZod> & IBaseDocument;
 
 const intervalSchema = new Schema({ start: Date, end: Date }, { _id: false });
 const TaskSchema = createSchema<ITask>({
   projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
+  // name:
   assigneeId: { type: Schema.Types.ObjectId, ref: 'Employee', required: true },
   tagId: { type: Schema.Types.ObjectId, ref: 'Tag', required: true },
   loggedMinutes: { type: Number, default: 0 },

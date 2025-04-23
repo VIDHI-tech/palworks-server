@@ -8,6 +8,15 @@ export const employeeZod = z.object({
   CTC: z.number(),
   workingHoursPerMonth: z.number(),
 });
+
+// create
+export const employeeCreateSchema = employeeZod.strict();
+export type EmployeeCreate = z.infer<typeof employeeCreateSchema>;
+
+// update
+export const employeeUpdateSchema = employeeZod.partial().strict();
+export type EmployeeUpdate = z.infer<typeof employeeUpdateSchema>;
+
 export type IEmployee = z.infer<typeof employeeZod> & IBaseDocument;
 
 const EmployeeSchema = createSchema<IEmployee>({

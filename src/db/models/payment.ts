@@ -8,6 +8,11 @@ export const paymentZod = z.object({
   amount: z.number(),
   paymentDate: z.date(),
 });
+
+//Create
+export const paymentCreateSchema = paymentZod.strict();
+export type PaymentCreate = z.infer<typeof paymentCreateSchema>;
+
 export type IPayment = z.infer<typeof paymentZod> & IBaseDocument;
 
 const PaymentSchema = createSchema<IPayment>({

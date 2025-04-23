@@ -10,6 +10,15 @@ export const projectZod = z.object({
   status: z.enum(['notstarted', 'ongoing', 'onhold', 'completed']).default('notstarted'),
   profitMarginPct: z.number().default(0),
 });
+
+//create
+export const projectCreateSchema = projectZod.strict();
+export type ProjectCreate = z.infer<typeof projectCreateSchema>;
+
+// update
+export const projectUpdateSchema = projectZod.partial().strict();
+export type ProjectUpdate = z.infer<typeof projectUpdateSchema>;
+
 export type IProject = z.infer<typeof projectZod> & IBaseDocument;
 
 const ProjectSchema = createSchema<IProject>({

@@ -8,7 +8,6 @@ export const varExpZod = z.object({
   expenseName: z.string(),
   amount: z.number(),
   description: z.string().optional(),
-  date: z.date(),
 });
 export type IVariableExpense = z.infer<typeof varExpZod> & IBaseDocument;
 
@@ -17,6 +16,5 @@ const VarExpSchema = createSchema<IVariableExpense>({
   expenseName: { type: String, required: true },
   amount: { type: Number, required: true },
   description: { type: String, default: '' },
-  date: { type: Date, required: true },
 });
 export const VariableExpenseModel = createModel<IVariableExpense>('VariableExpense', VarExpSchema);

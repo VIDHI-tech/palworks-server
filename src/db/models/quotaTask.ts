@@ -9,6 +9,15 @@ export const quotaTaskZod = z.object({
   telegramConversationCount: z.number().int(),
   remarks: z.string().optional(),
 });
+
+//Create
+export const quotaTaskCreateSchema = quotaTaskZod.strict();
+export type QuotaTaskCreate = z.infer<typeof quotaTaskCreateSchema>;
+
+// update
+export const quotaTaskUpdateSchema = quotaTaskZod.partial().strict();
+export type QuotaTaskUpdate = z.infer<typeof quotaTaskUpdateSchema>;
+
 export type IQuotaTask = z.infer<typeof quotaTaskZod> & IBaseDocument;
 
 const QuotaTaskSchema = createSchema<IQuotaTask>({
